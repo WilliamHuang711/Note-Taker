@@ -1,33 +1,68 @@
-let todoData =  require("../data/todoData")
+// let todoData =  require("../data/todoData")
 
 const fs = require('fs');
+let { v4: uuidv4 } = require("uuid");
 
 module.exports = (app) => {
 
     app.get("/api/notes", (req, res) => {
-        fs.readFile("db/db.json","utf-8", (error, data) =>{
+        fs.readFile("./db/db.json","utf-8", (error, data) =>{
             if (error) {
                 return console.log(error);
             }
-            console.log(data);
+            // console.log(data);
             res.json(JSON.parse(data))
         });
         // res.json(todoData);
       });
 
     app.post("/api/notes", (req, res) => {
-        console.log(req.body);
+        let noteId = uuidv4();
+        // console.log(req.body);
 
-        let notTask = {
-            title: req.title,
-            text: req.text,
-            id: req.id
+        let newNote = {
+            title: req.body.title,
+            text: req.body.text,
+            id: noteId
         }
 
-        res.send(JSON.stringify(req.body));
+        fs.readFile("./db/db.json", "utf-8", (error, noteData) => {
+            console.log("Test");
+            if (error) {
+              return console.log(`this is a line 14 ${error}`);
+            }
+            
+            let testRead = JSON.parse(noteData);
+            testRead.push(newNote);
+            fs.writeFile("./db/db.json", JSON.stringify(testRead, null, 2), err => {
+              if (err) throw err;
+              res.send(testRead);
+              console.log('Successfully wrote file')
+            })
+          });
 
-        data.push(req.body);
-        renderHtml();
+
+          fs.readFile("./db/db.json", "utf-8", (error, noteData) => {
+            console.log("Test");
+            if (error) {
+              return console.log(`this is a line 14 ${error}`);
+            }
+            
+            let testRead = JSON.parse(noteData);
+            testRead.push(newNote);
+            fs.writeFile("./db/db.json", JSON.stringify(testRead, null, 2), err => {
+              if (err) throw err;
+              res.send(testRead);
+              console.log('Successfully wrote file')
+            })
+          });
+
+
+
+        // res.send(JSON.stringify(req.body));
+
+        // data.push(req.body);
+        // renderHtml();
     });
 
     // app.post("/api/notes", function(req, res) {
@@ -44,6 +79,6 @@ module.exports = (app) => {
 // });
 };
 
-function renderHtml() {
-    fs.writeFileSync("./public/assets/notes.html", render(data), "utf-8")
-}
+// function renderHtml() {
+//     fs.writeFileSync("./public/assets/notes.html", render(data), "utf-8")
+// }
