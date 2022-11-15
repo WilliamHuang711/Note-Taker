@@ -1,4 +1,3 @@
-// let todoData =  require("../data/todoData")
 
 const fs = require('fs');
 let { v4: uuidv4 } = require("uuid");
@@ -8,17 +7,14 @@ module.exports = (app) => {
     app.get("/api/notes", (req, res) => {
         fs.readFile("./db/db.json","utf-8", (error, data) =>{
             if (error) {
-                return console.log(error);
+                throw error
             }
-            // console.log(data);
             res.json(JSON.parse(data))
         });
-        // res.json(todoData);
       });
 
     app.post("/api/notes", (req, res) => {
         let noteId = uuidv4();
-        // console.log(req.body);
 
         let newNote = {
             title: req.body.title,
