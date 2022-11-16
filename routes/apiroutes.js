@@ -42,7 +42,16 @@ module.exports = (app) => {
 
 
     app.delete("/api/notes/:id", (req, res) => {
-        res.send("Delete request at notes")
+      let noteId = req.params.id;
+      fs.readFile("./db/db.json", "utf-8", (error, noteData) => {
+        let testRead = JSON.parse(noteData);
+        let updatedNoteData = testRead.filter(note => note.id != noteId);
+        fs.writeFile("./db/db.json", JSON.stringify(updatedNoteData, null, 2), err => {
+          if (err) throw err;
+          res.send(updatedNoteData);
+        })
+  
+      })
     });
 
 
