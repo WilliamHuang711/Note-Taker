@@ -7,7 +7,7 @@ Start page for the application
 Enter your tasks, save button located at the top right.
 <img src="2.png">
 
-## LIve site
+## Live site
     https://gentle-reef-64843.herokuapp.com/
 
 ## License
